@@ -12,13 +12,15 @@ var express = require('express')
   , http = require('http')
   , settings = require('./settings')
   , flash = require('connect-flash')
-  , cookie = require('cookie')
   , connect = require('connect')
   , path = require('path');
 
 var app = express();
 
 var secret = 'SessionSecret';
+var sessionKey = 'express.sid';
+var store = new connect.session.MemoryStore();
+var cookieParser = express.cookieParser(secret);
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -29,8 +31,8 @@ app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
-app.use(express.cookieParser(secret));
-app.use(express.session({secret: secret, key: 'express.sid'}));
+app.use(cookieParser);
+app.use(express.session({store: store, key: sessionKey}));
 app.use(flash());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
@@ -69,14 +71,18 @@ tweetProcess.initSocket(io);
 
 io.configure(function() {
     io.set('authorization', function(handshake, cb) {   
-        if (handshake.headers.cookie) {
-            handshake.cookie = cookie.parse(handshake.headers.cookie);
-            handshake.sessionId = connect.utils.parseCookie(handshake.cookie['express.sid'], 'secret');
-            if (handshake.cookie['express.sid'] !== handshake.sessionId) {
-                return cb(null, false);
-            }
-            return cb(null, true);
-        }
-        return cb(null, false);
+        handshake.sessionId = cookieParser(handshake, {}, function(err) {
+            if (err) return cb(err, false);
+            store.get(handshake.signedCookies[sessionKey], function(err, session) {
+                if(err) return cb(err, false);
+                if (!session) return cb(null, false);
+                handshake.session = session;
+                return cb(null, true);
+            });
+        });
     });
+});
+
+io.sockets.on('connection', function(socket) {
+    socket.session = socket.handshake.session;
 });

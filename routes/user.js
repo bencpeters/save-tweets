@@ -4,7 +4,7 @@
 exports.login = function(req, res, next) {
     //already logged in
     if (req.session.user) {
-        var url = req.session.prev ? req.session.prev : "/";
+        var url = "/";
         return res.redirect(url);
     }
     res.render('login', { title: 'Login' });
