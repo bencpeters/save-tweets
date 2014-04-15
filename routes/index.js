@@ -22,7 +22,7 @@ exports.saveSettings = function(req, res, next) {
 
 function validateSettings(newSettings, currentValues) {
     var validSettings = ['twitterToken', 'twitterTokenSecret', 'twitterAPIKey', 
-                         'twitterAPISecret', 'S3BucketName', 'searchTerm', 
+                         'twitterAPISecret', 'S3BucketName', 'S3BucketLocation', 'searchTerm', 
                          'AWSKey', 'AWSSecret'];
                      for (var setting in newSettings) if (newSettings.hasOwnProperty(setting)) {
         if (validSettings.indexOf(setting) === -1) continue;

@@ -11,6 +11,8 @@ $(document).ready(function() {
                     var field = $('input[name=' + k + ']');
                     if (field.length > 0) {
                         field.val(v);
+                    } else if ((field = $('select[name=' + k + ']')).length > 0) {
+                        field.val(v);
                     }
                 });
             }

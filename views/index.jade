@@ -30,6 +30,17 @@ block content
             input(type="text", name="S3BucketName").form-control
             span.help-block Name of S3 bucket to store tweets in. Must be all lowercase.
           div.form-group
+            label(for="S3BucketLocation") S3 Bucket Location
+            select(name="S3BucketLocation").form-control
+              option(value="us-east-1") US East (N. Virginia)
+              option(value="us-west-1") US West (N. California)
+              option(value="us-west-2") US West (Oregon)
+              option(value="eu-west-1") EU (Ireland)
+              option(value="ap-southeast-1") Asia Pacific (Singapore)
+              option(value="ap-southeast-2") Asia Pacific (Sydney)
+              option(value="ap-northeast-1") Asia Pacific (Tokyo)
+              option(value="sa-east-1") South America (Sao Paulo)
+          div.form-group
             label(for="searchTerm") Search Term to track on Twitter
             input(type="text", name="searchTerm").form-control
           div.form-group
