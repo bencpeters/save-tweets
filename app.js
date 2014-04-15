@@ -38,6 +38,7 @@ if ('development' == app.get('env')) {
 
 app.locals.userAPI = userAPI;
 app.locals.settings = settings;
+app.locals.tweetProcess = tweetProcess;
 
 app.get('/', session.requiresLogin, routes.index);
 app.post('/', session.requiresLogin, routes.saveSettings);

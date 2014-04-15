@@ -1,9 +1,22 @@
 extends layout
 
 block content
-  div.container
+  div.container-fluid
     div.row
-      div.col-md-2
+      div(style="position:fixed;").col-md-4#process-control
+        h1 Save Tweets Process
+        p.status Current Status: <span id="process-status"></span>
+
+        div.process-controls
+          button.btn.btn-danger.btn-lg#stop Stop
+          button.btn.btn-warning.btn-lg#restart Restart
+          button.btn.btn-success.btn-lg#start Start
+
+        div#current-tweets
+          h3 Latest Tweets
+          ul.tweet-list
+          
+      div.col-md-4
       div.col-md-8.border-box
         h1 Configure Application
         h3 Enter configuration below 
@@ -50,4 +63,3 @@ block content
             label(for="AWSSecret") Amazon Web Services Access Secret
             input(type="text", name="AWSSecret").form-control
           input(type="submit", value="Save Options").btn.btn-primary
-      div.col-md-2
