@@ -10,9 +10,9 @@ var express = require('express')
   , tweetProcess = require('./routes/process')
   , session = require('./routes/session')
   , http = require('http')
-  , settings = require('./settings')
   , flash = require('connect-flash')
   , connect = require('connect')
+  , fs = require('fs')
   , path = require('path');
 
 var app = express();
@@ -21,6 +21,13 @@ var secret = 'SessionSecret';
 var sessionKey = 'express.sid';
 var store = new connect.session.MemoryStore();
 var cookieParser = express.cookieParser(secret);
+
+var settings;
+if (fs.existsSync('./settings.json')) {
+    settings = require('./settings');
+} else {
+    settings = {};
+}
 
 // all environments
 app.set('port', process.env.PORT || 3000);
