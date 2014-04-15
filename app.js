@@ -7,6 +7,7 @@ var express = require('express')
   , routes = require('./routes')
   , user = require('./routes/user')
   , userAPI = require('./models/user')
+  , tweetProcess = require('./routes/process')
   , session = require('./routes/session')
   , http = require('http')
   , settings = require('./settings')
@@ -44,6 +45,12 @@ app.get('/settings.json', session.requiresLogin, routes.settings);
 app.get('/login', user.login);
 app.post('/login', user.processLogin);
 app.post('/logout', user.logout);
+
+//Process control stuff
+app.post('/process/restart', session.requiresLogin, tweetProcess.restart);
+app.post('/process/stop', session.requiresLogin, tweetProcess.stop);
+app.post('/process/start', session.requiresLogin, tweetProcess.start);
+app.get('/process/status.json', session.requiresLogin, tweetProcess.status);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
