@@ -111,7 +111,7 @@ if __name__ == "__main__":
     options = handle_cli()
     
     try:
-        with open(options.config, 'r') as f:
+        with open(options.config[0], 'r') as f:
             settings = json.loads(f.read())
     except IOError:
         settings = {}

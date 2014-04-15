@@ -1,0 +1,80 @@
+extends layout
+
+block content
+  div.container-fluid
+    div.row
+      div(style="position:fixed;").col-md-4#process-control
+        h1 Save Tweets Process
+        p.status Current Status: <span id="process-status"></span>
+
+        div.process-controls
+          button.btn.btn-danger.btn-lg#stop Stop
+          button.btn.btn-warning.btn-lg#restart Restart
+          button.btn.btn-success.btn-lg#start Start
+
+        div#current-tweets
+          h3 Latest Tweets
+          ul.tweet-list
+          
+      div.col-md-4
+      div.col-md-8.border-box
+        h1 Configure Application
+        h3 Enter configuration below 
+        if errors
+          each error in errors  
+            div.alert.alert-danger.alert-dismissable
+              button(data-dismiss="alert", aria-hidden="true").close &times;
+              p= error
+        form(name="settings", action="/", method="post")#main-options
+          div.form-group
+            label(for="twitterToken") User Twitter Token
+            input(type="text", name="twitterToken").form-control
+          div.form-group
+            label(for="twitterTokenSecret") User Twitter Token Secret
+            input(type="text", name="twitterTokenSecret").form-control
+          div.form-group
+            label(for="twitterAPIKey") Twitter Application API Key
+            input(type="text", name="twitterAPIKey").form-control
+          div.form-group
+            label(for="twitterAPISecret") Twitter Application API Secret
+            input(type="text", name="twitterAPISecret").form-control
+          div.form-group
+            label(for="S3BucketName") S3 Bucket Name
+            input(type="text", name="S3BucketName").form-control
+            span.help-block Name of S3 bucket to store tweets in. Must be all lowercase.
+          div.form-group
+            label(for="S3BucketLocation") S3 Bucket Location
+            select(name="S3BucketLocation").form-control
+              option(value="us-east-1") US East (N. Virginia)
+              option(value="us-west-1") US West (N. California)
+              option(value="us-west-2") US West (Oregon)
+              option(value="eu-west-1") EU (Ireland)
+              option(value="ap-southeast-1") Asia Pacific (Singapore)
+              option(value="ap-southeast-2") Asia Pacific (Sydney)
+              option(value="ap-northeast-1") Asia Pacific (Tokyo)
+              option(value="sa-east-1") South America (Sao Paulo)
+          div.form-group
+            label(for="searchTerm") Search Term to track on Twitter
+            input(type="text", name="searchTerm").form-control
+          div.form-group
+            label(for="AWSKey") Amazon Web Services Access Key
+            input(type="text", name="AWSKey").form-control
+          div.form-group
+            label(for="AWSSecret") Amazon Web Services Access Secret
+            input(type="text", name="AWSSecret").form-control
+          input(type="submit", value="Save Options").btn.btn-primary
+    script(src="/socket.io/socket.io.js")
+    script.
+      $.ajax("/tweets/latest.json", {
+          error: function(jqXHR, textStatus, err) {
+              alert("Error getting latest tweets: " + err);
+          },
+          success: function(data) {
+              updateTweets(data);
+          },
+          type: "GET"
+      });
+      var socket = io.connect(document.URL);
+      socket.on('newTweet', function(data) {
+          updateTweets(data);
+      });

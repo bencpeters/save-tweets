@@ -1,0 +1,23 @@
+extends layout
+
+block content
+  div.container
+    div.row
+      div.col-md-3
+      div.col-md-6.login-box.border-box
+        h1 User Login
+        h3 Please login to configure the application
+        if error
+          div.alert.alert-danger.alert-dismissable
+            button(data-dismiss="alert", aria-hidden="true").close &times;
+            p= error
+        form(name="login", action="/login", method="post")
+          div.form-group
+            label(for="username").sr-only User Name
+            input(type="text", name="username", placeholder="User Name").form-control
+          div.form-group
+            label(for="password").sr-only Password
+            input(type="password", name="password", placeholder="Password").form-control
+          div.center-block
+            input(type="submit", value="Login").btn.btn-primary
+      div.col-md-3
