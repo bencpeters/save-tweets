@@ -16,14 +16,14 @@ exports.login = function(req, res, next) {
 exports.processLogin = function(req, res, next) {
     //already logged in
     if (req.session.user) {
-        var url = req.session.prev ? req.session.prev : "/";
+        var url = "/";
         return res.redirect(url);
     }
 
     if (req.body.password && req.body.password.length > 0) {
         res.app.locals.userAPI.authenticateUser(req.body.username, req.body.password, function(err, user) {
             if (user) {
-                var url = req.session.prev ? req.session.prev : "/";
+                var url = "/";
                 req.session.user = user;
                 res.redirect(url);
             } else {
