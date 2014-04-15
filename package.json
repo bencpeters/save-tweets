@@ -8,6 +8,9 @@
   "dependencies": {
     "express": "3.4.8",
     "connect-flash": "0.1.1",
-    "jade": "*"
+    "jade": "*",
+    "socket.io": "0.9.16",
+    "connect": "1.9.0",
+    "cookie": "*"
   }
 }

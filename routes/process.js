@@ -2,6 +2,7 @@ var spawn = require('child_process').spawn;
 
 var recent_tweets = [];
 var save_tweets_process = null;
+var socket;
 
 exports.recentTweets = function(cb) {
     return cb(null, recentTweets);
@@ -40,6 +41,14 @@ exports.status = function(req, res, next) {
     });
 };
 
+exports.initSocket = function(s) {
+    socket = s;
+};
+
+exports.latestTweets = function(req, res, next) {
+    return res.json(recent_tweets);
+};
+
 function start_process(cb) {
     if (save_tweets_process !== null) {
         return stop_process(function(err) { start_process(cb); });
@@ -49,7 +58,7 @@ function start_process(cb) {
         console.error("Save Tweets process exited with code: " + code);
         save_tweets_process = null;
         // auto-restart process - assumption is we failed here not by design
-        start_process(function() {});
+        //start_process(function() {});
     });
 
     readable = save_tweets_process.stdout;
@@ -60,6 +69,7 @@ function start_process(cb) {
             data.ts = new Date().getTime();
             recent_tweets.push(data);
             if (recent_tweets.length > 5) recent_tweets.shift();
+            socket.sockets.emit('newTweet', recent_tweets);
         }
     });
 

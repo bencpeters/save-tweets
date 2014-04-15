@@ -63,3 +63,18 @@ block content
             label(for="AWSSecret") Amazon Web Services Access Secret
             input(type="text", name="AWSSecret").form-control
           input(type="submit", value="Save Options").btn.btn-primary
+    script(src="/socket.io/socket.io.js")
+    script.
+      $.ajax("/tweets/latest.json", {
+          error: function(jqXHR, textStatus, err) {
+              alert("Error getting latest tweets: " + err);
+          },
+          success: function(data) {
+              updateTweets(data);
+          },
+          type: "GET"
+      });
+      var socket = io.connect(document.URL);
+      socket.on('newTweet', function(data) {
+          updateTweets(data);
+      });
