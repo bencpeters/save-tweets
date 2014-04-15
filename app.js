@@ -10,6 +10,7 @@ var express = require('express')
   , session = require('./routes/session')
   , http = require('http')
   , settings = require('./settings')
+  , flash = require('connect-flash')
   , path = require('path');
 
 var app = express();
@@ -25,6 +26,7 @@ app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(express.cookieParser('SessionSecret'));
 app.use(express.session());
+app.use(flash());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
