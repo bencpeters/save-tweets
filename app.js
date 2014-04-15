@@ -34,8 +34,11 @@ if ('development' == app.get('env')) {
 }
 
 app.locals.userAPI = userAPI;
+app.locals.settings = settings;
 
 app.get('/', session.requiresLogin, routes.index);
+app.post('/', session.requiresLogin, routes.saveSettings);
+app.get('/settings.json', session.requiresLogin, routes.settings);
 app.get('/login', user.login);
 app.post('/login', user.processLogin);
 app.post('/logout', user.logout);

@@ -1,5 +1,42 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  div.container
+    div.row
+      div.col-md-2
+      div.col-md-8.border-box
+        h1 Configure Application
+        h3 Enter configuration below 
+        if errors
+          each error in errors  
+            div.alert.alert-danger.alert-dismissable
+              button(data-dismiss="alert", aria-hidden="true").close &times;
+              p= error
+        form(name="settings", action="/", method="post")#main-options
+          div.form-group
+            label(for="twitterToken") User Twitter Token
+            input(type="text", name="twitterToken").form-control
+          div.form-group
+            label(for="twitterTokenSecret") User Twitter Token Secret
+            input(type="text", name="twitterTokenSecret").form-control
+          div.form-group
+            label(for="twitterAPIKey") Twitter Application API Key
+            input(type="text", name="twitterAPIKey").form-control
+          div.form-group
+            label(for="twitterAPISecret") Twitter Application API Secret
+            input(type="text", name="twitterAPISecret").form-control
+          div.form-group
+            label(for="S3BucketName") S3 Bucket Name
+            input(type="text", name="S3BucketName").form-control
+            span.help-block Name of S3 bucket to store tweets in. Must be all lowercase.
+          div.form-group
+            label(for="searchTerm") Search Term to track on Twitter
+            input(type="text", name="searchTerm").form-control
+          div.form-group
+            label(for="AWSKey") Amazon Web Services Access Key
+            input(type="text", name="AWSKey").form-control
+          div.form-group
+            label(for="AWSSecret") Amazon Web Services Access Secret
+            input(type="text", name="AWSSecret").form-control
+          input(type="submit", value="Save Options").btn.btn-primary
+      div.col-md-2
